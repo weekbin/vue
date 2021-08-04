@@ -10,13 +10,13 @@ import { initLifecycle, callHook } from './lifecycle'
 import { initProvide, initInjections } from './inject'
 import { extend, mergeOptions, formatComponentName } from '../util/index'
 
-let uid = 0
+let uid = 0 // 闭包存放 uid, 全局唯一
 
 export function initMixin (Vue: Class<Component>) {
   Vue.prototype._init = function (options?: Object) {
-    const vm: Component = this
+    const vm: Component = this // this -> vm, eg: const vm = new Vue(options)
     // a uid
-    vm._uid = uid++
+    vm._uid = uid++ 
 
     let startTag, endTag
     /* istanbul ignore if */

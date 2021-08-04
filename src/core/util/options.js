@@ -428,7 +428,7 @@ export function mergeOptions (
     }
   }
   function mergeField (key) {
-    const strat = strats[key] || defaultStrat
+    const strat = strats[key] || defaultStrat // 合并策略
     options[key] = strat(parent[key], child[key], vm, key)
   }
   return options

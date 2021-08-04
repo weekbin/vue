@@ -11,9 +11,7 @@ export let formatComponentName = (noop: any)
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
   const classifyRE = /(?:^|[-_])(\w)/g
-  const classify = str => str
-    .replace(classifyRE, c => c.toUpperCase())
-    .replace(/[-_]/g, '')
+  const classify = str => str.replace(classifyRE, c => c.toUpperCase()).replace(/[-_]/g, '')
 
   warn = (msg, vm) => {
     const trace = vm ? generateComponentTrace(vm) : ''
