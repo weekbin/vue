@@ -43,8 +43,8 @@ if (process.env.NODE_ENV !== 'production') {
     let name = options.name || options._componentTag
     const file = options.__file
     if (!name && file) {
-      const match = file.match(/([^/\\]+)\.vue$/)
-      name = match && match[1]
+      const match = file.match(/([^/\\]+)\.vue$/) // 不匹配路径 hello/world.vue, hello\\world.vue => world
+      name = match && match[1] // 组件名默认使用文件名
     }
 
     return (

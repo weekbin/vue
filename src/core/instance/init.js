@@ -49,13 +49,13 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
-    initLifecycle(vm)
-    initEvents(vm)
-    initRender(vm)
+    initLifecycle(vm) // 初始化 “$值” 和 “_值”
+    initEvents(vm) // 初始化 listeners 事件
+    initRender(vm) // 初始化 createElement 方法，响应式处理 $listeners $attrs
     callHook(vm, 'beforeCreate')
-    initInjections(vm) // resolve injections before data/props
-    initState(vm)
-    initProvide(vm) // resolve provide after data/props
+    initInjections(vm) // resolve injections before data/props 响应式处理 inject
+    initState(vm) // 初始化 props, methods, data, computed, watch
+    initProvide(vm) // resolve provide after data/props 挂在 provide
     callHook(vm, 'created')
 
     /* istanbul ignore if */

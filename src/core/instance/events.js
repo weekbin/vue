@@ -13,7 +13,7 @@ export function initEvents (vm: Component) {
   vm._events = Object.create(null)
   vm._hasHookEvent = false
   // init parent attached events
-  const listeners = vm.$options._parentListeners
+  const listeners = vm.$options._parentListeners // 非 native 事件
   if (listeners) {
     updateComponentListeners(vm, listeners)
   }
