@@ -41,6 +41,8 @@ export function initMixin (Vue: Class<Component>) {
         vm
       )
     }
+
+    // 根据不同情况做了一层不同的代理
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
       initProxy(vm)
@@ -65,6 +67,7 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    // 如果提供了 el，则直接挂载到 el 上
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
@@ -91,9 +94,9 @@ export function initInternalComponent (vm: Component, options: InternalComponent
 }
 
 export function resolveConstructorOptions (Ctor: Class<Component>) {
-  let options = Ctor.options
+  let options = Ctor.options // component, filter, directive
   if (Ctor.super) {
-    const superOptions = resolveConstructorOptions(Ctor.super)
+    const superOptions = resolveConstructorOptions(Ctor.super) // fu
     const cachedSuperOptions = Ctor.superOptions
     if (superOptions !== cachedSuperOptions) {
       // super option changed,

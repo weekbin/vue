@@ -52,6 +52,7 @@ if (process.env.NODE_ENV !== 'production') {
     })
   }
 
+  // the handler.has method is a trap for the in operator
   const hasHandler = {
     has (target, key) {
       const has = key in target

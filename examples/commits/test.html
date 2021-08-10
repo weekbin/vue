@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Vue.js github commits example</title>
+  <!-- Delete ".min" for console warnings in development -->
+  <script src="../../dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <template>
+      <hello-world @el="hh" />
+    </template>
+  </div>
+  <script>
+    Vue.component('hello-world', {
+      name: 'hello-world',
+      template: '<div @click="kk">hello wolrd</div>',
+      methods: {
+        kk() {
+          debugger
+          this.$emit('el')
+        }
+      }
+    })
+    const vm = new Vue({
+      el: '#app',
+      methods: {
+        hh() {
+          console.log(this)
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
