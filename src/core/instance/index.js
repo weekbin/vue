@@ -21,6 +21,6 @@ initMixin(Vue) // 在 Vue 原型上挂载 _init 方法，使得实例化时可�
 stateMixin(Vue) // 在 Vue 原型上挂载 data, props, set, del, watch 方法
 eventsMixin(Vue) // 在 Vue 原型上挂载 on, once, off, emit 方法
 lifecycleMixin(Vue) // 在 Vue 原型上挂载 _update, forceUpdate, destroy 方法
-renderMixin(Vue)
+renderMixin(Vue) // 在 Vue 原型上挂载 runtime helpers, nextTick, _render 方法
 
 export default Vue

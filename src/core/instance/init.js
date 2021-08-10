@@ -69,7 +69,7 @@ export function initMixin (Vue: Class<Component>) {
 
     // 如果提供了 el，则直接挂载到 el 上
     if (vm.$options.el) {
-      vm.$mount(vm.$options.el)
+      vm.$mount(vm.$options.el) // web 和 weex 有不同的实现
     }
   }
 }
