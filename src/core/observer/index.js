@@ -43,12 +43,12 @@ export class Observer {
     this.value = value
     this.dep = new Dep()
     this.vmCount = 0
-    def(value, '__ob__', this)
+    def(value, '__ob__', this) // value.__ob__ = this 标识 value 已经被观察
     if (Array.isArray(value)) {
       if (hasProto) {
-        protoAugment(value, arrayMethods)
+        protoAugment(value, arrayMethods) // 支持 __proto__ 的情况，直接把对象挂载到 value.__proto__ 上
       } else {
-        copyAugment(value, arrayMethods, arrayKeys)
+        copyAugment(value, arrayMethods, arrayKeys) // 不支持 __proto__ 的情况，直接把 7 种数组方法写在 value 上
       }
       this.observeArray(value)
     } else {
@@ -73,7 +73,7 @@ export class Observer {
    */
   observeArray (items: Array<any>) {
     for (let i = 0, l = items.length; i < l; i++) {
-      observe(items[i])
+      observe(items[i])  // new Observer(items[i])
     }
   }
 }
@@ -108,17 +108,18 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * or the existing observer if the value already has one.
  */
 export function observe (value: any, asRootData: ?boolean): Observer | void {
+  // isObject => obj !== null && typeof obj === 'object'
   if (!isObject(value) || value instanceof VNode) {
     return
   }
   let ob: Observer | void
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
-    ob = value.__ob__
+    ob = value.__ob__ // 如果已经被观察，直接返回之前的 observer 类实例
   } else if (
     shouldObserve &&
     !isServerRendering() &&
-    (Array.isArray(value) || isPlainObject(value)) &&
-    Object.isExtensible(value) &&
+    (Array.isArray(value) || isPlainObject(value)) && // 数组和对象才能被观察，map 和 set 不行
+    Object.isExtensible(value) && // Object.freeze 的对象是不可拓展的，不被观察
     !value._isVue
   ) {
     ob = new Observer(value)
