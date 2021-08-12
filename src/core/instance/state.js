@@ -144,7 +144,7 @@ function initData (vm: Component) {
         `Use prop default value instead.`,
         vm
       )
-    } else if (!isReserved(key)) {
+    } else if (!isReserved(key)) { // Check if a string starts with $ or _
       proxy(vm, `_data`, key)
     }
   }

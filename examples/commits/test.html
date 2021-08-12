@@ -1,45 +1,48 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Vue.js github commits example</title>
+    <!-- Delete ".min" for console warnings in development -->
+    <script src="../../dist/vue.js"></script>
+  </head>
 
-<head>
-  <title>Vue.js github commits example</title>
-  <!-- Delete ".min" for console warnings in development -->
-  <script src="../../dist/vue.js"></script>
-</head>
-
-<body>
-  <div id="app">
-    <template>
-      <hello-world @el="hh" />
-    </template>
-  </div>
-  <script>
-    Vue.component('hello-world', {
-      name: 'hello-world',
-      template: '<div @click="kk">hello wolrd</div>',
-      methods: {
-        kk() {
-          debugger
-          this.$emit('el')
+  <body>
+    <div id="app">
+      <template>
+        <hello-world />
+      </template>
+    </div>
+    <script>
+      Vue.component("hello-world", {
+        name: "hello-world",
+        template: "<div>{{ a }}</div>",
+        data() {
+          return {
+            a: {
+              b: {
+                c: "world"
+              }
+            }
+          };
+        },
+        mounted() {
+          setTimeout(() => {
+            this.a.b.c = "hello";
+            console.log(this.a.b);
+          }, 1000);
+        },
+        watch: {
+          "a": {
+            handler() {
+              console.log(this.a);
+            },
+            deep: true
+          }
         }
-      }
-    })
-    const vm = new Vue({
-      el: '#app',
-      methods: {
-        hh() {
-          console.log(this)
-        }
-      },
-      data(){
-        return {
-          motherFucker: Object.freeze({
-            hello: [1,2,3]
-          })
-        }
-      }
-    })
-  </script>
-</body>
-
+      });
+      const vm = new Vue({
+        el: "#app"
+      });
+    </script>
+  </body>
 </html>

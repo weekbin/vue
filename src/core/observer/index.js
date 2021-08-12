@@ -50,9 +50,9 @@ export class Observer {
       } else {
         copyAugment(value, arrayMethods, arrayKeys) // 不支持 __proto__ 的情况，直接把 7 种数组方法写在 value 上
       }
-      this.observeArray(value)
+      this.observeArray(value) // 遍历调用 observe, 遇到对象就 new Observer(value), 继而调用 this.walk(value)
     } else {
-      this.walk(value)
+      this.walk(value) // 遍历调用 defineReactive, 设置 getter, setter
     }
   }
 
@@ -60,6 +60,13 @@ export class Observer {
    * Walk through all properties and convert them into
    * getter/setters. This method should only be called when
    * value type is Object.
+   * 
+   * Vue 没有办法观测到一开始没有定义在规定根节点上的数据
+   * 例如： data(){ return { a: { b: 'hello' } } }
+   * a.b 的操作可以被观察到，因为会被传入该函数 defineReactive
+   * a.c 的操作不能被直接观察到，因为初始化的时候不会被 defineReactive
+   * 
+   * 同样，没有被 defineReactive 的对象也不会被 watch 到， deep 也没用
    */
   walk (obj: Object) {
     const keys = Object.keys(obj)
@@ -122,10 +129,10 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) && // Object.freeze 的对象是不可拓展的，不被观察
     !value._isVue
   ) {
-    ob = new Observer(value)
+    ob = new Observer(value) // 遇到对象会递归观察，被观察的数据是响应式的，但是 watch 不会观察到第二层的对象
   }
   if (asRootData && ob) {
-    ob.vmCount++
+    ob.vmCount++ // 计算 vm 数量， asRootData 为 true 代表每个组件的 data 被 observe
   }
   return ob
 }

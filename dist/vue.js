@@ -1018,7 +1018,6 @@
     customSetter,
     shallow
   ) {
-    debugger
     var dep = new Dep();
 
     var property = Object.getOwnPropertyDescriptor(obj, key);
