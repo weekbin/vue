@@ -164,7 +164,7 @@ export function mountComponent (
       }
     }
   }
-  callHook(vm, 'beforeMount')
+  callHook(vm, 'beforeMount') // beforeMount 之前主要做了把 template 字符串编译为 render 函数的事情
 
   let updateComponent
   /* istanbul ignore if */

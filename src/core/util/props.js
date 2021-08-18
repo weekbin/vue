@@ -28,7 +28,7 @@ export function validateProp (
   const absent = !hasOwn(propsData, key)
   let value = propsData[key]
   // boolean casting
-  const booleanIndex = getTypeIndex(Boolean, prop.type)
+  const booleanIndex = getTypeIndex(Boolean, prop.type) // prop => eg: { type: Boolean, default: false}
   if (booleanIndex > -1) {
     if (absent && !hasOwn(prop, 'default')) {
       value = false

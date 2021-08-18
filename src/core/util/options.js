@@ -39,6 +39,7 @@ if (process.env.NODE_ENV !== 'production') {
         'creation with the `new` keyword.'
       )
     }
+    // el, propsData 采用默认的合并策略, el, propsData 默认只会在实例化时被用到
     return defaultStrat(parent, child)
   }
 }
@@ -283,6 +284,7 @@ export function validateComponentName (name: string) {
       'should conform to valid custom element name in html5 specification.'
     )
   }
+  // 不能与 slot, component 重名，不能与 html, svg 内置标签重名
   if (isBuiltInTag(name) || config.isReservedTag(name)) {
     warn(
       'Do not use built-in or reserved HTML elements as component ' +
@@ -305,7 +307,7 @@ function normalizeProps (options: Object, vm: ?Component) {
     while (i--) {
       val = props[i]
       if (typeof val === 'string') {
-        name = camelize(val)
+        name = camelize(val) // 首字母大写
         res[name] = { type: null }
       } else if (process.env.NODE_ENV !== 'production') {
         warn('props must be strings when using array syntax.')
@@ -333,9 +335,9 @@ function normalizeProps (options: Object, vm: ?Component) {
  * Normalize all injections into Object-based format
  */
 function normalizeInject (options: Object, vm: ?Component) {
-  const inject = options.inject
+  const inject = options.inject // 拷贝 inject 对象
   if (!inject) return
-  const normalized = options.inject = {}
+  const normalized = options.inject = {} // 重置 inject 对象为 normalized 对象
   if (Array.isArray(inject)) {
     for (let i = 0; i < inject.length; i++) {
       normalized[inject[i]] = { from: inject[i] }
@@ -344,7 +346,7 @@ function normalizeInject (options: Object, vm: ?Component) {
     for (const key in inject) {
       const val = inject[key]
       normalized[key] = isPlainObject(val)
-        ? extend({ from: key }, val)
+        ? extend({ from: key }, val) // 把 val 对象上的所有属性浅复制到 { from: key } 上
         : { from: val }
     }
   } else if (process.env.NODE_ENV !== 'production') {
@@ -361,6 +363,7 @@ function normalizeInject (options: Object, vm: ?Component) {
  */
 function normalizeDirectives (options: Object) {
   const dirs = options.directives
+  // 如果 directives 是函数，相当于 { bind, update } 都注册了
   if (dirs) {
     for (const key in dirs) {
       const def = dirs[key]
@@ -388,14 +391,15 @@ function assertObjectType (name: string, value: any, vm: ?Component) {
 export function mergeOptions (
   parent: Object,
   child: Object,
-  vm?: Component
+  vm?: Component // Vue.mixin 和 Vue.extend 函数中调用 mergeOptions 时，不传递第三个参数
 ): Object {
   if (process.env.NODE_ENV !== 'production') {
-    checkComponents(child)
+    checkComponents(child) // 检查函数名是否符合规范
   }
-
+  // 标准化 child, 如果是函数则取其属性 options
+  //  child 可以是普通对象，也可以是 Vue 或 Vue.extend() 的构造函数
   if (typeof child === 'function') {
-    child = child.options
+    child = child.options 
   }
 
   normalizeProps(child, vm)
@@ -406,6 +410,7 @@ export function mergeOptions (
   // but only if it is a raw options object that isn't
   // the result of another mergeOptions call.
   // Only merged options has the _base property.
+  // 被合并过的对象有 _base，不再处理
   if (!child._base) {
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)
@@ -419,6 +424,8 @@ export function mergeOptions (
 
   const options = {}
   let key
+  // 把 parent 和 child 对象上的属性用特定的合并策略全部合并到 options 上
+  // 并把 options 作为结果返回
   for (key in parent) {
     mergeField(key)
   }

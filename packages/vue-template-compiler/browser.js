@@ -5030,7 +5030,7 @@
       {
         // detect possible CSP restriction
         try {
-          new Function('return 1');
+          new Function('return 1'); // 能力检测
         } catch (e) {
           if (e.toString().match(/unsafe-eval|CSP/)) {
             warn$$1(
@@ -5053,7 +5053,7 @@
       }
 
       // compile
-      var compiled = compile(template, options);
+      var compiled = compile(template, options); // 解析出 ast 语法树和 render 字符串
 
       // check compilation errors/tips
       {
@@ -5086,7 +5086,7 @@
       // turn code into functions
       var res = {};
       var fnGenErrors = [];
-      res.render = createFunction(compiled.render, fnGenErrors);
+      res.render = createFunction(compiled.render, fnGenErrors); // new Function(render)
       res.staticRenderFns = compiled.staticRenderFns.map(function (code) {
         return createFunction(code, fnGenErrors)
       });

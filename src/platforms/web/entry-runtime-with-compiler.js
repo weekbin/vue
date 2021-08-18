@@ -19,7 +19,7 @@ Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
 ): Component {
-  el = el && query(el)
+  el = el && query(el) // 找 dom 节点并返回对应的 Element 对象
 
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
@@ -54,7 +54,7 @@ Vue.prototype.$mount = function (
         return this
       }
     } else if (el) {
-      template = getOuterHTML(el)
+      template = getOuterHTML(el) // 返回 el 节点的模板字符串
     }
     if (template) {
       /* istanbul ignore if */

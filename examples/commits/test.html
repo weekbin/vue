@@ -9,34 +9,39 @@
   <body>
     <div id="app">
       <template>
-        <hello-world />
+        <hello-world message="f given props" />
       </template>
     </div>
     <script>
+      debugger
       Vue.component("hello-world", {
         name: "hello-world",
-        template: "<div>{{ a }}</div>",
+        template: "<div>{{ a }}{{ message }}</div>",
         data() {
           return {
-            a: {
-              b: {
-                c: "world"
-              }
-            }
+            a: 'hello weekbin'
           };
         },
         mounted() {
-          setTimeout(() => {
-            this.a.b.c = "hello";
-            console.log(this.a.b);
-          }, 1000);
+          this.printf()
         },
         watch: {
           "a": {
             handler() {
-              console.log(this.a);
+              this.printf()
             },
             deep: true
+          }
+        },
+        methods: {
+          printf() {
+            console.log(this.a)
+          }
+        },
+        props: {
+          message: {
+            type: String,
+            default: 'message from parent'
           }
         }
       });

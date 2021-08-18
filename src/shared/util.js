@@ -102,6 +102,7 @@ export function toNumber (val: string): number | string {
 /**
  * Make a map and return a function for checking if a key
  * is in that map.
+ * 返回一个函数，接受一个参数，如果这个参数在 makeMap 的 str 种出现过则返回 true
  */
 export function makeMap (
   str: string,
@@ -119,11 +120,13 @@ export function makeMap (
 
 /**
  * Check if a tag is a built-in tag.
+ * slot 和 component 返回 true
  */
 export const isBuiltInTag = makeMap('slot,component', true)
 
 /**
  * Check if an attribute is a reserved attribute.
+ * key, ref, slot, slot-scope, is 返回 true
  */
 export const isReservedAttribute = makeMap('key,ref,slot,slot-scope,is')
 
