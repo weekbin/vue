@@ -156,7 +156,7 @@ function mergeHook (
         : [childVal]
     : parentVal
   return res
-    ? dedupeHooks(res)
+    ? dedupeHooks(res) // 数组去重
     : res
 }
 
@@ -171,11 +171,12 @@ function dedupeHooks (hooks) {
 }
 
 LIFECYCLE_HOOKS.forEach(hook => {
-  strats[hook] = mergeHook
+  strats[hook] = mergeHook // 所有生命周期函数的合并策略都相同
 })
 
 /**
  * Assets
+ * component, directive, filter
  *
  * When a vm is present (instance creation), we need to do
  * a three-way merge between constructor options, instance
@@ -187,9 +188,9 @@ function mergeAssets (
   vm?: Component,
   key: string
 ): Object {
-  const res = Object.create(parentVal || null)
+  const res = Object.create(parentVal || null) // Vue 内置组件会被挂载在原型链上，如：KeepAlive, Transition, TransitionGroup
   if (childVal) {
-    process.env.NODE_ENV !== 'production' && assertObjectType(key, childVal, vm)
+    process.env.NODE_ENV !== 'production' && assertObjectType(key, childVal, vm) // 保证 childVal 是个对象
     return extend(res, childVal)
   } else {
     return res
@@ -230,7 +231,7 @@ strats.watch = function (
       parent = [parent]
     }
     ret[key] = parent
-      ? parent.concat(child)
+      ? parent.concat(child) // 如果父子监听相同的 key, 直接将回调函数合并为数组
       : Array.isArray(child) ? child : [child]
   }
   return ret
@@ -253,14 +254,16 @@ strats.computed = function (
   }
   if (!parentVal) return childVal
   const ret = Object.create(null)
-  extend(ret, parentVal)
+  extend(ret, parentVal) // 先 extend parent 后 extend child，相同的 key, 以 child 的覆盖为准
   if (childVal) extend(ret, childVal)
   return ret
 }
-strats.provide = mergeDataOrFn
+strats.provide = mergeDataOrFn // 与 data 的合并策略相同
 
 /**
  * Default strategy.
+ * 
+ * 默认的合并策略，如果 child 存在，直接用 child 覆盖 parent
  */
 const defaultStrat = function (parentVal: any, childVal: any): any {
   return childVal === undefined
