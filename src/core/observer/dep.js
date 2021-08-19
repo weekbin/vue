@@ -17,7 +17,7 @@ export default class Dep {
 
   constructor () {
     this.id = uid++
-    this.subs = []
+    this.subs = [] // 用于存放 Watcher
   }
 
   addSub (sub: Watcher) {

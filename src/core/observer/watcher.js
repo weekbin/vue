@@ -80,7 +80,7 @@ export default class Watcher {
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn
     } else {
-      this.getter = parsePath(expOrFn)
+      this.getter = parsePath(expOrFn) // 返回一个取值函数，parsePath(a.b.c.d) => (fn(obj) => obj.a.b.c.d)
       if (!this.getter) {
         this.getter = noop
         process.env.NODE_ENV !== 'production' && warn(
