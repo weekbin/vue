@@ -25,7 +25,7 @@ export default class Dep {
   }
 
   removeSub (sub: Watcher) {
-    remove(this.subs, sub)
+    remove(this.subs, sub) // 从 subs 数组重删除 sub
   }
 
   depend () {

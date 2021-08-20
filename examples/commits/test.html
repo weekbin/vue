@@ -13,39 +13,34 @@
       </template>
     </div>
     <script>
-      debugger
       Vue.component("hello-world", {
         name: "hello-world",
-        template: "<div>{{ a }}{{ message }}</div>",
+        template: "<div><div>{{ a }}</div><div>{{ b }}</div><div>{{ c }}</div></div>",
         data() {
           return {
             a: 'hello weekbin'
           };
         },
-        mounted() {
-          this.printf()
-        },
         watch: {
           "a": {
             handler() {
-              this.printf()
+              console.log(this.a, this.b, this.c)
             },
             deep: true
           }
         },
-        methods: {
-          printf() {
-            console.log(this.a)
+        computed: {
+          b() {
+            return this.a + ' b'
+          },
+          c() {
+            return this.a + this.b + ' c'
           }
         },
-        props: {
-          message: {
-            type: String,
-            default: 'message from parent'
-          }
+        mounted() {
+          console.dir(this.$data)
         }
       });
-      debugger
       const vm = new Vue({
         el: "#app"
       });

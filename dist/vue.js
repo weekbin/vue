@@ -4786,9 +4786,9 @@
         // create internal watcher for the computed property.
         watchers[key] = new Watcher(
           vm,
-          getter || noop,
-          noop,
-          computedWatcherOptions
+          getter || noop, // computed 函数
+          noop, // computed wathcer 没有回调函数
+          computedWatcherOptions // computed watcher options => { lazy: true }
         );
       }
 

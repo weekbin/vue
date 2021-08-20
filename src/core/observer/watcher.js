@@ -23,6 +23,8 @@ let uid = 0
  * A watcher parses an expression, collects dependencies,
  * and fires callback when the expression value changes.
  * This is used for both the $watch() api and directives.
+ *
+ * watcher 总共有三种：computed watcher, user watcher, render watcher
  */
 export default class Watcher {
   vm: Component;
@@ -48,13 +50,13 @@ export default class Watcher {
     expOrFn: string | Function,
     cb: Function,
     options?: ?Object,
-    isRenderWatcher?: boolean
+    isRenderWatcher?: boolean // 当且仅当是 render watcher 的时候会传递第五个参数，true
   ) {
     this.vm = vm
     if (isRenderWatcher) {
       vm._watcher = this
     }
-    vm._watchers.push(this)
+    vm._watchers.push(this) // 用于存放当前组件的所有 watcher
     // options
     if (options) {
       this.deep = !!options.deep
@@ -148,10 +150,12 @@ export default class Watcher {
         dep.removeSub(this)
       }
     }
+    // depIds 和 newDepIds 交换顺序, newDepIds 存入 depIds, 清空 newDepIds
     let tmp = this.depIds
     this.depIds = this.newDepIds
     this.newDepIds = tmp
     this.newDepIds.clear()
+    // deps 和 newDeps 交换顺序, newDeps 存入 deps, 清空 newDeps
     tmp = this.deps
     this.deps = this.newDeps
     this.newDeps = tmp
@@ -169,7 +173,7 @@ export default class Watcher {
     } else if (this.sync) {
       this.run()
     } else {
-      queueWatcher(this)
+      queueWatcher(this) // 默认为异步更新
     }
   }
 
@@ -216,7 +220,7 @@ export default class Watcher {
   depend () {
     let i = this.deps.length
     while (i--) {
-      this.deps[i].depend()
+      this.deps[i].depend() // 把 this(watcher) 加入依赖 this.deps[i].subs, eg: { id: 1, subs: [] }
     }
   }
 
@@ -233,7 +237,7 @@ export default class Watcher {
       }
       let i = this.deps.length
       while (i--) {
-        this.deps[i].removeSub(this)
+        this.deps[i].removeSub(this) // 调用 remove(this.deps[i].subs, this)
       }
       this.active = false
     }

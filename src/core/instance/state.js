@@ -187,9 +187,9 @@ function initComputed (vm: Component, computed: Object) {
       // create internal watcher for the computed property.
       watchers[key] = new Watcher(
         vm,
-        getter || noop,
-        noop,
-        computedWatcherOptions
+        getter || noop, // computed 函数
+        noop, // computed wathcer 没有回调函数
+        computedWatcherOptions // computed watcher options => { lazy: true }
       )
     }
 
@@ -355,7 +355,7 @@ export function stateMixin (Vue: Class<Component>) {
       return createWatcher(vm, expOrFn, cb, options)
     }
     options = options || {}
-    options.user = true
+    options.user = true // $watch 函数调用的都会混入 { user: true }
     const watcher = new Watcher(vm, expOrFn, cb, options)
     if (options.immediate) {
       const info = `callback for immediate watcher "${watcher.expression}"`
