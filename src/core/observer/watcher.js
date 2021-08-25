@@ -197,7 +197,7 @@ export default class Watcher {
         this.value = value
         if (this.user) {
           const info = `callback for watcher "${this.expression}"`
-          invokeWithErrorHandling(this.cb, this.vm, [value, oldValue], this.vm, info)
+          invokeWithErrorHandling(this.cb, this.vm, [value, oldValue], this.vm, info) // watch handler(newVal, oldVal)
         } else {
           this.cb.call(this.vm, value, oldValue)
         }

@@ -60,10 +60,10 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   // components with in Weex's multi-instance scenarios.
   Vue.options._base = Vue
 
-  extend(Vue.options.components, builtInComponents)
+  extend(Vue.options.components, builtInComponents) // 把 keepAlive 挂载到 vue 身上
 
-  initUse(Vue)
-  initMixin(Vue)
-  initExtend(Vue)
-  initAssetRegisters(Vue)
+  initUse(Vue) // Vue.use 注册插件的方法
+  initMixin(Vue) // Vue.mixin 方法，原理就是把被 mixin 的对象， merge 到自己的 options 上（等于调用 mergeOptions）
+  initExtend(Vue) // Vue.extend 方法
+  initAssetRegisters(Vue) // Vue.component/filter/directive 方法
 }

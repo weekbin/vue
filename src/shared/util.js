@@ -48,7 +48,7 @@ export function isObject (obj: mixed): boolean %checks {
 const _toString = Object.prototype.toString
 
 export function toRawType (value: any): string {
-  return _toString.call(value).slice(8, -1)
+  return _toString.call(value).slice(8, -1) // e.g., 截取 [object Object] 中的 Object 字段返回
 }
 
 /**
@@ -68,7 +68,7 @@ export function isRegExp (v: any): boolean {
  */
 export function isValidArrayIndex (val: any): boolean {
   const n = parseFloat(String(val))
-  return n >= 0 && Math.floor(n) === n && isFinite(val)
+  return n >= 0 && Math.floor(n) === n && isFinite(val) // 索引是数字，大于零，有限值
 }
 
 export function isPromise (val: any): boolean {
