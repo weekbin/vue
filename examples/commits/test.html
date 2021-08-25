@@ -1,49 +1,66 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Vue.js github commits example</title>
-    <!-- Delete ".min" for console warnings in development -->
-    <script src="../../dist/vue.js"></script>
-  </head>
 
-  <body>
-    <div id="app">
-      <template>
-        <hello-world message="f given props" />
-      </template>
-    </div>
-    <script>
-      Vue.component("hello-world", {
-        name: "hello-world",
-        template: "<div><div>{{ a }}</div><div>{{ b }}</div><div>{{ c }}</div></div>",
-        data() {
-          return {
-            a: 'hello weekbin'
-          };
-        },
-        watch: {
-          "a": {
-            handler() {
-              console.log(this.a, this.b, this.c)
-            },
-            deep: true
-          }
-        },
-        computed: {
-          b() {
-            return this.a + ' b'
+<head>
+  <title>Vue.js github commits example</title>
+  <!-- Delete ".min" for console warnings in development -->
+  <script src="../../dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <template>
+      <hello-world message="f given props" />
+    </template>
+  </div>
+  <div id="test">abc</div>
+  <script>
+    Vue.component("hello-world", {
+      name: "hello-world",
+      template: "<div><div ref='pc'>{{ a }}</div><div>{{ b }}</div><div>{{ c }}</div></div>",
+      data() {
+        return {
+          a: 'hello weekbin'
+        };
+      },
+      watch: {
+        "a": {
+          handler() {
+            console.log(this.a, this.b, this.c)
           },
-          c() {
-            return this.a + this.b + ' c'
-          }
-        },
-        mounted() {
-          console.dir(this.$data)
+          deep: true
         }
-      });
-      const vm = new Vue({
-        el: "#app"
-      });
-    </script>
-  </body>
+      },
+      computed: {
+        b() {
+          return this.a + ' b'
+        },
+        c() {
+          return this.a + this.b + ' c'
+        }
+      },
+      mounted() {
+        this.a = 'fuck'
+        Promise.resolve().then(() => console.dir(this.$refs['pc'].innerHTML))
+      }
+    });
+    const vm = new Vue({
+      el: "#app"
+    });
+  </script>
+  <!-- <script>
+    new Promise(resolve => resolve()).then(() => console.log('promise'))
+    setTimeout(() => console.log('setTimeout'), 0)
+    const node = document.getElementById('test')
+    const frg = document.createDocumentFragment()
+    for (let i = 0; i < 10000; i++) {
+      const li = document.createElement('li')
+      li.innerHTML = i
+      frg.appendChild(li)
+    }
+    node.appendChild(frg)
+    console.log(node.innerHTML)
+  </script> -->
+</body>
+
 </html>
