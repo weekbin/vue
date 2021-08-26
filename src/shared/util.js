@@ -154,7 +154,8 @@ export function hasOwn (obj: Object | Array<*>, key: string): boolean {
  * Create a cached version of a pure function.
  */
 export function cached<F: Function> (fn: F): F {
-  const cache = Object.create(null)
+  const cache = Object.create(null) // cached(fn) 创建的函数 fn, 会存在一个相应的闭包在独立的 cached 函数中
+                                    // 只要函数运行过，得到过结果，则不再调用 fn 进行计算，直接返回闭包中的计算结果
   return (function cachedFn (str: string) {
     const hit = cache[str]
     return hit || (cache[str] = fn(str))
@@ -163,6 +164,7 @@ export function cached<F: Function> (fn: F): F {
 
 /**
  * Camelize a hyphen-delimited string.
+ * 将 hello-world 转化为 helloWorld（小驼峰）
  */
 const camelizeRE = /-(\w)/g
 export const camelize = cached((str: string): string => {
@@ -171,6 +173,7 @@ export const camelize = cached((str: string): string => {
 
 /**
  * Capitalize a string.
+ * 字符串首字母大写
  */
 export const capitalize = cached((str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -212,7 +215,7 @@ function nativeBind (fn: Function, ctx: Object): Function {
   return fn.bind(ctx)
 }
 
-export const bind = Function.prototype.bind
+export const bind = Function.prototype.bind // 适配器模式，根据是否支持 bind，适配不同的函数，达到同样的功能
   ? nativeBind
   : polyfillBind
 
@@ -246,7 +249,7 @@ export function toObject (arr: Array<any>): Object {
   const res = {}
   for (let i = 0; i < arr.length; i++) {
     if (arr[i]) {
-      extend(res, arr[i])
+      extend(res, arr[i]) // 遍历调用 extend 函数，把数组中对象上的内容全部浅拷贝到 res 上
     }
   }
   return res
@@ -270,8 +273,12 @@ export const no = (a?: any, b?: any, c?: any) => false
 
 /**
  * Return the same value.
+ * e.g, export function resolveFilter (id: string): Function {
+ *        return resolveAsset(this.$options, 'filters', id, true) || identity
+ *      }
+ * 兜底函数，防止过滤器没定义时返回 undefined。返回一个没有过滤功能的过滤器防止报错。
  */
-export const identity = (_: any) => _
+export const identity = (_: any) => _ // 为了代码的一致性，适配器模式，选择 planA 或 planB，planB 的情况只要是一个返回输入值的函数即可
 
 /**
  * Generate a string containing static keys from compiler modules.
@@ -279,12 +286,13 @@ export const identity = (_: any) => _
 export function genStaticKeys (modules: Array<ModuleOptions>): string {
   return modules.reduce((keys, m) => {
     return keys.concat(m.staticKeys || [])
-  }, []).join(',')
+  }, []).join(',') // [1,2,3,4,5] => 1,2,3,4,5
 }
 
 /**
  * Check if two values are loosely equal - that is,
  * if they are plain objects, do they have the same shape?
+ * 对比两个数据结构是否相同，非引用比较（Object.is）,属于值比较
  */
 export function looseEqual (a: any, b: any): boolean {
   if (a === b) return true
